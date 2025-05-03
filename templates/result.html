@@ -4,11 +4,182 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Face Recognition Results</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cal+Sans&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Cal Sans', sans-serif;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #6990f2;
+        }
+
+        .result-container {
+            width: 800px;
+            padding: 30px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 7px 7px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        header {
+            font-size: 30px;
+            font-weight: 400;
+            text-align: center;
+            color: #6990f2;
+            margin-bottom: 30px;
+        }
+
+        .result-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .result-info {
+            flex: 1;
+            padding-right: 30px;
+        }
+
+        .image-container {
+            flex: 1;
+            text-align: center;
+        }
+
+        .image-container img {
+            max-width: 100%;
+            max-height: 350px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .result-details {
+            background: #e9f0ff;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        .result-item {
+            margin: 15px 0;
+            font-size: 16px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .result-label {
+            font-weight: bold;
+            color: #6990f2;
+            margin-bottom: 5px;
+        }
+
+        .result-value {
+            padding: 8px;
+            background-color: #f7f9ff;
+            border-radius: 4px;
+            word-break: break-word;
+        }
+
+        .accuracy {
+            margin-top: 5px;
+            height: 20px;
+            background-color: #e1e7f5;
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .accuracy-bar {
+            height: 100%;
+            background-color: #6990f2;
+            border-radius: 10px;
+            width: 0;
+            /* Default width */
+        }
+
+        .accuracy-text {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            text-align: center;
+            line-height: 20px;
+            color: #fff;
+            font-weight: bold;
+            text-shadow: 0px 0px 2px rgba(0, 0, 0, 0.5);
+        }
+
+        .back-btn {
+            display: block;
+            width: 180px;
+            margin: 30px auto 0;
+            padding: 12px;
+            background-color: #6990f2;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+
+        .back-btn:hover {
+            background-color: #5680e0;
+        }
+    </style>
 </head>
 
 <body>
+    <div class="result-container">
+        <header>Face Recognition Results</header>
 
+        <div class="result-content">
+            <div class="result-info">
+                <div class="result-details">
+                    <div class="result-item">
+                        <span class="result-label">Uploaded File</span>
+                        <span class="result-value">{{ filename }}</span>
+                    </div>
+
+                    <div class="result-item">
+                        <span class="result-label">Detected Person</span>
+                        <span class="result-value">{{ person_name }}</span>
+                    </div>
+
+                    <div class="result-item">
+                        <span class="result-label">Accuracy</span>
+                        <div class="accuracy-bar" data-accuracy="{{ accuracy }}"></div>
+                        <div class="accuracy-text">{{ accuracy }}%</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="image-container">
+            <img src="{{ url_for('static', filename='uploads/' + filename) }}" alt="Uploaded Image">
+        </div>
+    </div>
+
+    <a href="/" class="back-btn">Upload Another</a>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const accuracyBar = document.querySelector('.accuracy-bar');
+            const accuracy = accuracyBar.getAttribute('data-accuracy');
+            accuracyBar.style.width = accuracy + '%';
+        });
+    </script>
+</body>
 </body>
 
 </html>

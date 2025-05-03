@@ -24,12 +24,17 @@
             background-color: #6990f2;
         }
 
+        ::selection {
+            color: #fff;
+            background: #6990F2;
+        }
+
         .wrapper {
             width: 430px;
             padding: 30px;
             background-color: #fff;
             border-radius: 5px;
-            box-shadow: 0 15px 25px rgba(0, 0, 0, .5);
+            box-shadow: 7px 7px 12px rgba(0, 0, 0, 0.05);
         }
 
         .wrapper header {
@@ -39,7 +44,7 @@
             color: #6990f2;
         }
 
-        .wrapper form {
+        .upload-area {
             height: 167px;
             display: flex;
             align-items: center;
@@ -51,15 +56,16 @@
             margin: 30px;
         }
 
-        form :where(i, p) {
+        .upload-area i,
+        .upload-area p {
             color: #6990f2;
         }
 
-        form i {
+        .upload-area i {
             font-size: 50px;
         }
 
-        form p {
+        .upload-area p {
             font-size: 17px;
             margin-top: 15px;
         }
@@ -68,16 +74,18 @@
             background: #e9f0ff;
             margin-bottom: 10px;
             list-style: none;
-            padding: 15px 20px; 
+            padding: 15px 20px;
             display: flex;
             border-radius: 5px;
             align-items: center;
             justify-content: space-between;
         }
+
         section .row i {
             font-size: 30px;
             color: #6990f2;
         }
+
         section .details span {
             font-size: 14px;
         }
@@ -86,59 +94,154 @@
             width: 100%;
             margin-left: 15px;
         }
+
         .progress-area .details {
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
+
+        .progress-area .content .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: #fff;
+            border-radius: 30px;
+            margin-bottom: 4px;
+        }
+
+        .progress-bar .progress {
+            height: 100%;
+            width: 0%;
+            background: #6990f2;
+            border-radius: inherit;
+        }
+
+        .uploaded-area {
+            max-height: 230px;
+            overflow-y: scroll;
+        }
+
+        .uploaded-area.onprogress {
+            max-height: 150px;
+        }
+
+        .uploaded-area::-webkit-scrollbar {
+            width: 0px;
+            background: transparent;
+        }
+
         .uploaded-area .row .content {
             display: flex;
             align-items: center;
         }
-        .uploaded-area .row .details{
+
+        .uploaded-area .row .details {
             display: flex;
             margin-left: 15px;
             flex-direction: column;
         }
 
+        .uploaded-area .row .details .size {
+            font-size: 11px;
+            color: #6990f2;
+        }
+
+        .uploaded-area i.fa-check {
+            color: #6990f2;
+            font-size: 16px;
+        }
+
+        #submit-btn {
+            width: 100%;
+            padding: 10px;
+            margin-top: 15px;
+            background-color: #6990f2;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        #submit-btn:disabled {
+            background-color: #a5bef0;
+            cursor: not-allowed;
+        }
     </style>
 </head>
 
 <body>
     <div class="wrapper">
         <header>Face Recognition</header>
-        <form action="#">
-            <i class="fas fa-cloud-upload-alt"></i>
-            <p>Browse File to Upload</p>
-        </form>
-        <section class="progress-area">
-            <li class="row">
-                <i class="fas fa-file-alt"></i>
-                <div class="content">
-                    <div class="details">
-                        <span class="name">image_01.png • Uploading</span>
-                        <span class="percent">50%</span>
-                    </div>
-                    <div class="progress-bar">
-                        <div class="progress"></div>
-                    </div>
-                </div>
-            </li>
-        </section>
-        <section class="uploaded-area">
-            <li class="row">
-                <div class="content">
-                    <i class="fas fa-file-alt"></i>
-                    <div class="details">
-                        <span class="name">image_01.png • Uploading</span>
-                        <span class="size">70 KB</span>
-                    </div>
-                </div>
-                <i class="fas fa-check"></i>
-            </li>
-        </section>
 
+        <form action="/upload" method="POST" enctype="multipart/form-data">
+            <!-- File input is hidden but will be triggered by JavaScript -->
+            <input type="file" class="file-input" name="file" hidden>
+
+            <!-- This div mimics the original form's appearance -->
+            <div class="upload-area">
+                <i class="fas fa-cloud-upload-alt"></i>
+                <p>Browse File to Upload</p>
+            </div>
+
+            <section class="progress-area"></section>
+            <section class="uploaded-area"></section>
+
+            <!-- Submit button is now part of the form -->
+            <button type="submit" id="submit-btn" disabled>Submit</button>
+        </form>
     </div>
+
+    <script>
+        const form = document.querySelector("form"),
+            fileInput = document.querySelector(".file-input"),
+            progressArea = document.querySelector(".progress-area"),
+            uploadedArea = document.querySelector(".uploaded-area"),
+            uploadArea = document.querySelector(".upload-area"),
+            submitBtn = document.getElementById("submit-btn");
+
+        // When clicking on the upload area, trigger the file input
+        uploadArea.addEventListener("click", () => {
+            fileInput.click();
+        });
+
+        // Prevent the form submission when clicking on the upload area
+        uploadArea.addEventListener("click", (e) => {
+            e.preventDefault();
+        });
+
+        // Process the selected file
+        fileInput.onchange = ({ target }) => {
+            const file = target.files[0];
+            uploadedArea.innerHTML = "";
+            progressArea.innerHTML = "";
+
+            if (file) {
+                submitBtn.disabled = false;
+
+                let fileName = file.name;
+                if (fileName.length >= 12) {
+                    const splitName = fileName.split('.');
+                    const ext = splitName.pop();
+                    const base = splitName.join('.');
+                    fileName = base.substring(0, 13) + "... ." + ext;
+                }
+
+                const fileHTML = `<li class="row">
+                    <div class="content upload">
+                        <i class="fas fa-file-alt"></i>
+                        <div class="details">
+                            <span class="name">${fileName}</span>
+                            <span class="size">${(file.size / 1024).toFixed(2)} KB</span>
+                        </div>
+                    </div>
+                </li>`;
+                uploadedArea.innerHTML = fileHTML;
+            } else {
+                submitBtn.disabled = true;
+            }
+        };
+    </script>
 </body>
 
 </html>
