@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Face Recognition App</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cal+Sans&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Cal Sans', sans-serif;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #6990f2;
+        }
+
+        .wrapper {
+            width: 430px;
+            padding: 30px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 15px 25px rgba(0, 0, 0, .5);
+        }
+
+        .wrapper header {
+            font-size: 30px;
+            font-weight: 400;
+            text-align: center;
+            color: #6990f2;
+        }
+
+        .wrapper form {
+            height: 167px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            border: 2px dashed #6990f2;
+            border-radius: 10px;
+            cursor: pointer;
+            margin: 30px;
+        }
+
+        form :where(i, p) {
+            color: #6990f2;
+        }
+
+        form i {
+            font-size: 50px;
+        }
+
+        form p {
+            font-size: 17px;
+            margin-top: 15px;
+        }
+
+        section .row {
+            background: #e9f0ff;
+            margin-bottom: 10px;
+            list-style: none;
+            padding: 15px 20px; 
+            display: flex;
+            border-radius: 5px;
+            align-items: center;
+            justify-content: space-between;
+        }
+        section .row i {
+            font-size: 30px;
+            color: #6990f2;
+        }
+        section .details span {
+            font-size: 14px;
+        }
+
+        .progress-area .row .content {
+            width: 100%;
+            margin-left: 15px;
+        }
+        .progress-area .details {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .uploaded-area .row .content {
+            display: flex;
+            align-items: center;
+        }
+        .uploaded-area .row .details{
+            display: flex;
+            margin-left: 15px;
+            flex-direction: column;
+        }
+
+    </style>
+</head>
+
+<body>
+    <div class="wrapper">
+        <header>Face Recognition</header>
+        <form action="#">
+            <i class="fas fa-cloud-upload-alt"></i>
+            <p>Browse File to Upload</p>
+        </form>
+        <section class="progress-area">
+            <li class="row">
+                <i class="fas fa-file-alt"></i>
+                <div class="content">
+                    <div class="details">
+                        <span class="name">image_01.png • Uploading</span>
+                        <span class="percent">50%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress"></div>
+                    </div>
+                </div>
+            </li>
+        </section>
+        <section class="uploaded-area">
+            <li class="row">
+                <div class="content">
+                    <i class="fas fa-file-alt"></i>
+                    <div class="details">
+                        <span class="name">image_01.png • Uploading</span>
+                        <span class="size">70 KB</span>
+                    </div>
+                </div>
+                <i class="fas fa-check"></i>
+            </li>
+        </section>
+
+    </div>
+</body>
+
+</html>
